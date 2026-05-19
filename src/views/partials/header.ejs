@@ -1,0 +1,27 @@
+<header class="header">
+    <nav class="navbar">
+        <a href="/"><img  class="header-logo" src="/images/logo.png" alt="logo"></a>
+        <form action="/products/search" method="GET" class="search-container">
+            <input type="text" placeholder="Buscar productos..." name="query" id="" required>
+        </form>
+
+        <div class="cart-user-container">
+            <a href="/cart" class="cart-container">
+                <img src="/images/bag.png" alt="Bolsa de compras">
+                
+                 <% if (cantidadTotalCarrito > 0) { %>
+                    <span class="cart-count"> <%= cantidadTotalCarrito %></span>
+                <% } %>
+            </a>
+
+            <a href="/auth/login" class="user-container">
+                <img src="/images/usuario.png" alt="Usuario">
+                <p class="user-name">Login</p>
+            </a>
+            <div class="user-container-atom">
+                <img src="/images/usuario.png" alt="Usuario">
+            </div>
+            <img src="/images/menu.png" alt="Menú" class="menu-icon">
+        </div>
+    </nav>
+</header>

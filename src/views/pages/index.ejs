@@ -1,0 +1,58 @@
+<%- include('../partials/categories', { categorias }) %>
+
+<section class="benefits-section">
+    <div class="benefits-container">
+        <a href="#" class="benefit-container">
+            <img class="benefit-bg" src="/images/beneficion-disney.png" alt="">
+            <div class="benefit-content">
+                <img class="benefit-logo" src="/images/logo-disney.png" alt="Disney">
+                <div class="benefit-text">
+                    <p class="benefit-title">Disney+</p>
+                    <p class="benefit-subtitle">Series y películas sin límite</p>
+                </div>
+            </div>
+        </a>
+
+        <a href="#" class="benefit-container">
+            <img class="benefit-bg" src="/images/beneficio-max.webp" alt="">
+            <div class="benefit-content">
+                <img class="benefit-logo" src="/images/logo-max.jpg" alt="HBO Max">
+                <div class="benefit-text">
+                    <p class="benefit-title">HBO Max</p>
+                    <p class="benefit-subtitle">Series y películas sin límite</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section class="product-section">
+    <h2 class="product-section-title">Te puede interesar</h2>
+    <div class="products-container">
+        <%- include('../partials/productCard', { products, categoria: "bebida", id:null }) %>
+    </div>
+</section>
+
+<section class="product-section">
+    <h2 class="product-section-title">Los mas pedidos</h2>
+    <div class="products-container">
+        <%- include('../partials/productCard', { products, categoria: "alcohol", id:null }) %>
+        <%- include('../partials/productCard', { products, categoria: "comida", id:null }) %>
+    </div>
+</section>
+
+<section class="product-section">
+    <h2 class="product-section-title">Tecnologia</h2>
+    <div class="products-container">
+        <%- include('../partials/productCard', { products, categoria: "electronica", id:null }) %>
+    </div>
+</section>
+<section class="product-section">
+    <h2 class="product-section-title">Nuestra ropa</h2>
+    <div class="products-container">
+        <%- include('../partials/productCard', { products, categoria: "ropa", id:null }) %>
+    </div>
+</section>
+
+
+<%- include('../partials/categories', { categorias }) %>

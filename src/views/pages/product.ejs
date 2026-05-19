@@ -1,0 +1,79 @@
+<% if(product) { %>
+    <div class="product-detail-main">
+        <div class="product-detail-wrapper">
+
+            <nav class="product-detail-breadcrumbs">
+                <a href="/">Volver al listado</a>
+                <span class="breadcrumb-separator">></span>
+                <a href="#">
+                    <%= product.categoria %>
+                </a>
+            </nav>
+
+            <div class="product-detail-layout">
+
+                <section class="product-detail-image-section">
+                    <div class="product-detail-thumbnails">
+                        <% product.thumbnails.forEach((thumb, index)=> { %>
+                            <img src="<%= thumb %>" alt="Miniatura <%= index + 1 %> de <%= product.name %>"
+                                class="product-detail-thumb">
+                        <% }) %>
+                    </div>
+                    
+                    <div class="product-detail-main-image-container">
+                        <% if(product.image) { %> 
+                            <img src="<%= product.image %>" alt="<%= product.name %>" class="product-detail-main-image">
+                        <% } else { %>
+                            <img class="product-detail-main-image"
+                                src="https://st2.depositphotos.com/2586633/46477/v/950/depositphotos_464771766-stock-illustration-no-photo-or-blank-image.jpg"
+                                alt="Imagen no disponible">
+                        <% } %>
+                    </div>
+                </section>
+
+                <section class="product-detail-info-section">
+
+                    <div class="product-detail-info-header">
+                        <h1 class="product-detail-title">
+                            <%= product.name %>
+                        </h1>
+
+                        <div class="product-detail-price-points">
+                            <span class="product-detail-price-number">
+                                $<%= product.price %>
+                            </span>
+                        </div>
+                    </div>
+
+                    <form class="product-detail-action-form" action="/cart/agregar" method="POST">
+                        <input type="hidden" name="productId" value="<%= product.id %>">
+                        <input type="hidden" name="quantity" value="1">
+
+                        <% if (product.stock === 0) { %>
+                            <p class="btn-add-cart-bloqued">Agregar al Carrito</p>
+                        <% } else { %>
+                            <button type="submit" class="product-detail-add-to-cart-btn">Agregar al Carrito</button>
+                        <% } %>
+                    </form>
+
+                    <div class="product-detail-description">
+                        <p>
+                            <%= product.description %>
+                        </p>
+                    </div>
+
+                </section>
+            </div>
+        </div>
+
+        <section class="product-section">
+            <h2 class="product-section-title">Productos relacionados</h2>
+            <div class="products-container">
+                <%- include('../partials/productCard', { products, categoria: product.categoria, id: product.id }) %>
+            </div>
+        </section>
+
+        <%- include('../partials/categories', { categorias }) %>
+        
+    </div>
+<% } %>

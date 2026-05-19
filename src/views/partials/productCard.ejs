@@ -1,0 +1,42 @@
+<% const idActual=locals.id || null; const productosFiltrados=products.filter(product=> {
+    // A) Si estamos en la vista de detalle, excluimos el producto actual
+    if (product.id === idActual) return false;
+
+    // B) Si la categoría es "all", dejamos pasar a todos
+    if (categoria === "all") return true;
+
+    // C) Si es una categoría específica, solo dejamos pasar los que coinciden
+    return product.categoria === categoria;
+    });
+    %>
+
+    <% if (productosFiltrados.length===0) { %>
+
+        <div class="empty-category-message" style="text-align: center; padding: 40px; width: 100%;">
+            <h3>¡Ups! No tenemos productos en esta categoría por ahora. 😕</h3>
+            <p>¡Seguimos agregando stock todas las semanas!</p>
+        </div>
+
+        <% } else { %>
+
+            <% productosFiltrados.forEach(product=> { %>
+                <a href="/products/<%= product.id %>" class="product-card">
+                    <% if (product.stock===0) { %>
+                        <div class="without-stock-overlay">
+                            <p class="without-stock-card">Sin stock</p>
+                        </div>
+                        <%}%>
+                            <img src="<%= product.image && product.image.trim() !== '' ? product.image : 'https://st2.depositphotos.com/2586633/46477/v/950/depositphotos_464771766-stock-illustration-no-photo-or-blank-image.jpg' %>"
+                                alt="<%= product.name %>" class="product-image">
+
+                            <div class="product-data">
+                                <h3 class="product-name">
+                                    <%= product.name %>
+                                </h3>
+                                <p class="product-price">$<%= product.price.toFixed(2) %>
+                                </p>
+                            </div>
+                </a>
+                <% }); %>
+
+                    <% } %>

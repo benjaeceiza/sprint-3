@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Registro</title>
+</head>
+
+<body>
+
+    <%- include('../partials/headerAuth') %>
+        <main>
+            <div class="auth-bg">
+                <section class="auth-section">
+                    <h1>Registrate!</h1>
+                    <form id="registerForm" class="auth-form" action="/auth/register" method="POST" novalidate>
+
+                        <div class="flex-group">
+                            <div class="form-group">
+                                <label for="name">Nombre</label>
+                                <input type="text" id="name" name="name" placeholder="Tu nombre">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname">Apellido</label>
+                                <input type="text" id="lastname" name="lastname" placeholder="Tu apellido">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Correo electrónico</label>
+                            <input type="email" id="email" name="email" placeholder="correo@ejemplo.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmar contraseña</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Mínimo 8 caracteres">
+                        </div>
+                        
+                        <span id="message-error" class="error-text"></span>
+                        <button type="submit">Crear cuenta</button>
+                    </form>
+                </section>
+
+                <a href="/auth/login" class="have-count">¿Ya tienes una cuenta? <span class="bold">Inicia sesión aquí</span></a>
+            </div>
+        </main>
+
+        <%- include('../partials/footer') %>
+        <script src="/js/validarUsuario.js"></script>
+</body>
+
+</html>

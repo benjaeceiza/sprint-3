@@ -1,0 +1,26 @@
+[
+    {
+        "id": 5,
+        "nombre": "Jack Daniel's Tennessee Honey Botella 750 mL",
+        "categoria": "alcohol",
+        "cantidad": 1,
+        "precio": 25.00,
+        "imagen": "/images/products/jack.jfif"
+    },
+    {
+        "id": 11,
+        "nombre": "Bolsa de Doritos",
+        "categoria": "comida",
+        "cantidad": 1,
+        "precio": 5.00,
+        "imagen": "/images/products/doritos.jfif"
+    },
+    {
+        "id": 1,
+        "nombre": "Coca Cola Lata 354ml Pack x8",
+        "categoria": "bebida",
+        "cantidad": 2,
+        "precio": 1.50,
+        "imagen": "/images/products/coca.jfif"
+    }
+]

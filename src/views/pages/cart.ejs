@@ -1,0 +1,67 @@
+<div class="cart-main">
+    <div class="go-back">
+        <a href="/">&larr; Volver</a>
+    </div>
+    
+    <h1>Producto en el Carrito</h1>
+
+    <% if (cart.length === 0) { %>
+        <section class="cart-empty-message" style="text-align: center; padding: 40px;">
+            <h2>Tu carrito está vacío 😕</h2>
+            <p>¡Agregá productos para empezar tu compra!</p>
+        </section>
+    <% } else { %>
+        <section class="cart-product-section">
+            <% cart.forEach(item => { %>
+                <div class="cart-item">
+                    <div class="cart-thumbnail">
+                        <% if(item.imagen){ %>
+                            <img src="<%= item.imagen %>" alt="<%= item.nombre %>">
+                        <% } else { %>
+                            <img src="https://st2.depositphotos.com/2586633/46477/v/950/depositphotos_464771766-stock-illustration-no-photo-or-blank-image.jpg"
+                                class="cart-item-image" alt="<%= item.nombre %>">
+                        <% } %>
+
+                        <h3 class="cart-item-name">
+                            <%= item.nombre %>
+                        </h3>
+                    </div>
+
+                    <div class="cart-actions">
+                        <form action="/cart/delete/<%= item.id %>" method="POST" style="margin: 0;">
+                            <button type="submit" class="cart-btn-delete">Eliminar</button>
+                        </form>
+
+                        <div class="cart-btn-quantity-container">
+                            <form action="/cart/decrease/<%= item.id %>" method="POST" style="margin: 0; display: flex;">
+                                <button type="submit" class="cart-btn-decrease">-</button>
+                            </form>
+
+                            <span class="cart-item-quantity">
+                                <%= item.cantidad %>
+                            </span>
+
+                            <form action="/cart/increase/<%= item.id %>" method="POST" style="margin: 0; display: flex;">
+                                <button type="submit" class="cart-btn-increase">+</button>
+                            </form>
+                        </div>
+
+                        <div class="cart-item-price">
+                            <span> $<%= item.precio %></span>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </section>
+
+        <section class="cart-total-section">
+            <h3>Total a pagar: $<%= totalGeneral %></h3>
+            
+            <form action="/cart/vaciar" method="POST" style="margin-top: 10px;">
+                <button type="submit" class="cart-btn-empty">Vaciar Carrito</button>
+            </form>
+            
+            <a href="/checkout" class="checkout-btn">Ir a pagar</a>
+        </section>
+    <% } %>
+</div>

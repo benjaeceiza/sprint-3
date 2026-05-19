@@ -1,0 +1,40 @@
+<%- include('../partials/categories', { categorias }) %>
+<div class="catalog-container">
+    <div class="catalog-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        
+        <h1>Resutlados para: <%= category !== 'all' ? category : 'Todos los productos' %></h1>
+
+        <form method="GET">
+            <!-- Mantenemos el filtro de categoría si existe -->
+            <% if (typeof category !== 'undefined' && category !== 'all' && !category.startsWith('Resultados')) { %>
+                <input type="hidden" name="categoria" value="<%= category %>">
+            <% } %>
+
+            <!-- NUEVO: Mantenemos la palabra buscada si el usuario ordena los resultados -->
+            <% if (typeof searchQuery !== 'undefined' && searchQuery !== '') { %>
+                <input type="hidden" name="query" value="<%= searchQuery %>">
+            <% } %>
+
+            <select name="sort" onchange="this.form.submit()" style="padding: 8px; border-radius: 5px;">
+                <option value="">Ordenar por precio...</option>
+                <option value="asc" <%= typeof currentSort !== 'undefined' && currentSort === 'asc' ? 'selected' : '' %>>Menor a Mayor</option>
+                <option value="desc" <%= typeof currentSort !== 'undefined' && currentSort === 'desc' ? 'selected' : '' %>>Mayor a Menor</option>
+            </select>
+        </form>
+
+    </div>
+
+    <section class="product-section">
+        <div class="products-container">
+           
+            <% if (products.length > 0) { %>
+                <%- include('../partials/productCard', { products: products, categoria: 'all', id: null }) %>
+            <% } else { %>
+                <div style="width: 100%; text-align: center; padding: 40px 0;">
+                    <h3 style="color: #666;">No encontramos productos que coincidan con tu búsqueda 🕵️‍♂️</h3>
+                    <p>Intentá buscar con otras palabras o revisá la ortografía.</p>
+                </div>
+            <% } %>
+        </div>
+    </section>
+</div>

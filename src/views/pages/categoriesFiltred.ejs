@@ -1,0 +1,8 @@
+<%- include('../partials/categories', { categorias }) %>
+
+<section class="product-section">
+    <h2 class="product-section-title">Nuestros productos: <%= category %> </h2>
+    <div class="products-container">
+        <%- include('../partials/productCard', { products, categoria: category, id: null }) %>
+    </div>
+</section>
