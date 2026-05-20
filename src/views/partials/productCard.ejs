@@ -1,42 +1,51 @@
-<% const idActual=locals.id || null; const productosFiltrados=products.filter(product=> {
-    // A) Si estamos en la vista de detalle, excluimos el producto actual
-    if (product.id === idActual) return false;
+<% 
+    // 1. Atrapamos el ID actual (si existe para no mostrarlo en "Productos relacionados"
+    const idActual = locals.id || null; 
 
-    // B) Si la categoría es "all", dejamos pasar a todos
-    if (categoria === "all") return true;
+    // 2. Filtramos los productos antes de renderizarlos
+    const productosFiltrados = products.filter(product => {
+        // A) Excluimos el producto actual
+        if (product.id === idActual) return false;
 
-    // C) Si es una categoría específica, solo dejamos pasar los que coinciden
-    return product.categoria === categoria;
+        // B) Si la categoria es all, se muestran todos
+        if (categoria === "all") return true;
+
+        // C) Filtramos por la categoría exacta 
+        return product.categoria && product.categoria.toLowerCase() === categoria.toLowerCase();
     });
-    %>
+%>
 
-    <% if (productosFiltrados.length===0) { %>
+<!-- 3. Usamos el array ya filtrado para mostrar el mensaje o las tarjetas --> 
+<% if (!productosFiltrados || productosFiltrados.length === 0) { %>
 
-        <div class="empty-category-message" style="text-align: center; padding: 40px; width: 100%;">
-            <h3>¡Ups! No tenemos productos en esta categoría por ahora. 😕</h3>
-            <p>¡Seguimos agregando stock todas las semanas!</p>
-        </div>
+    <div class="empty-category-message" style="text-align: center; padding: 40px; width: 100%;">
+        <h3>¡Ups! No tenemos productos en esta categoría por ahora. 😕</h3>
+        <p>¡Seguimos agregando stock todas las semanas!</p>
+    </div>
 
-        <% } else { %>
+<% } else { %>
 
-            <% productosFiltrados.forEach(product=> { %>
-                <a href="/products/<%= product.id %>" class="product-card">
-                    <% if (product.stock===0) { %>
-                        <div class="without-stock-overlay">
-                            <p class="without-stock-card">Sin stock</p>
-                        </div>
-                        <%}%>
-                            <img src="<%= product.image && product.image.trim() !== '' ? product.image : 'https://st2.depositphotos.com/2586633/46477/v/950/depositphotos_464771766-stock-illustration-no-photo-or-blank-image.jpg' %>"
-                                alt="<%= product.name %>" class="product-image">
+    <% productosFiltrados.forEach(product => { %>
+        <a href="/products/<%= product.id %>" class="product-card">
+            
+            <% if (product.stock === 0) { %>
+                <div class="without-stock-overlay">
+                    <p class="without-stock-card">Sin stock</p>
+                </div>
+            <% } %>
+            
+            <!-- Validacion por si viene sin imagen -->
+            <img src="<%= product.image && product.image.trim() !== '' ? product.image : 'https://st2.depositphotos.com/2586633/46477/v/950/depositphotos_464771766-stock-illustration-no-photo-or-blank-image.jpg' %>"
+                 alt="<%= product.name %>" class="product-image">
 
-                            <div class="product-data">
-                                <h3 class="product-name">
-                                    <%= product.name %>
-                                </h3>
-                                <p class="product-price">$<%= product.price.toFixed(2) %>
-                                </p>
-                            </div>
-                </a>
-                <% }); %>
+            <div class="product-data">
+                <h3 class="product-name">
+                    <%= product.name %>
+                </h3>
+                
+                <p class="product-price">$<%= Number(product.price).toFixed(2) %></p>
+            </div>
+        </a>
+    <% }); %>
 
-                    <% } %>
+<% } %>

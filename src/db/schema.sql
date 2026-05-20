@@ -1,4 +1,5 @@
 
+
 -- Tabla Categories
 CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -14,6 +15,8 @@ CREATE TABLE IF NOT EXISTS products (
     description TEXT,
     price REAL NOT NULL,
     stock INTEGER NOT NULL DEFAULT 0,
+    image TEXT,             
+    thumbnails TEXT,        
     category_id INTEGER,
     FOREIGN KEY (category_id) REFERENCES categories (id)
 );

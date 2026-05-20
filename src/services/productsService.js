@@ -1,54 +1,86 @@
-const products = require('../data/products.json');
-const categories = require("../data/categories.json")
-
+const db = require('../db/database.js'); // Asegurate de que la ruta a database.js sea correcta
 
 const normalizeId = (id) => {
-  
     const parsedId = Number(id);
-
     if (Number.isInteger(parsedId) && parsedId > 0) {
-        return parsedId; 
+        return parsedId;
     }
     return null;
-
 }
 
-// Trae todos los productos
+// Trae todos los productos desde la base de datos (con imagen agregada)
 const getAllProducts = () => {
-    return products;
+    const sql = `
+        SELECT p.id, p.title AS name, p.description, p.price, p.stock, p.image, c.name AS categoria
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+    `;
+    return db.prepare(sql).all();
 }
 
+// Busca productos por nombre en la base de datos (con imagen agregada)
 const searchProducts = (searchTerm) => {
-    if (!searchTerm) return []; 
-    
-    const terminoMinusc = searchTerm.toLowerCase();
-    
-    return products.filter(product => 
-        product.name.toLowerCase().includes(terminoMinusc)
-    );
+    if (!searchTerm) return [];
+
+    const sql = `
+        SELECT p.id, p.title AS name, p.description, p.price, p.stock, p.image, c.name AS categoria
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.title LIKE ?
+    `;
+
+    return db.prepare(sql).all(`%${searchTerm}%`);
 };
 
-// Busca un producto por ID 
+// Busca un producto por ID en la base de datos
 const getProductById = (id) => {
-    return products.find(product => product.id === id);
+    const validId = normalizeId(id);
+    if (!validId) return null;
+
+    const sql = `
+        SELECT p.id, p.title AS name, p.description, p.price, p.stock, p.image, p.thumbnails, c.name AS categoria
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.id = ?
+    `;
+    const product = db.prepare(sql).get(validId);
+
+    // Si encontramos el producto y tiene thumbnails en texto, lo parseamos a array
+    if (product && product.thumbnails) {
+        product.thumbnails = JSON.parse(product.thumbnails);
+    }
+
+    return product;
 }
 
-// Filtra por categoría
+// Filtra por categoría en la base de datos (con imagen agregada)
 const getProductsByCategory = (categoria) => {
+    if (!categoria || categoria.toLowerCase() === 'all') {
+        return getAllProducts();
+    }
 
-    if (!categoria || categoria === 'all') return products;
-
-    return products.filter(product => product.categoria.toLowerCase() === categoria.toLowerCase());
+    const sql = `
+        SELECT p.id, p.title AS name, p.description, p.price, p.stock, p.image, c.name AS categoria
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE LOWER(c.name) = LOWER(?)
+    `;
+    return db.prepare(sql).all(categoria);
 }
 
-// Extrae todas las categorías 
+// Extrae todas las categorías desde la base de datos (Corregido a description AS icon)
 const getCategories = () => {
-    return categories;
+    const sql = `SELECT id, name, icon FROM categories`;
+    return db.prepare(sql).all();
 }
 
-//Trae productos de forma ascendente o descendente
+// -------------------------------------------------------------------------
+// FUNCIONES DE UTILIDAD 
+// -------------------------------------------------------------------------
+
+// Trae productos de forma ascendente o descendente
 const sortProducts = (productsArray, sortOrder) => {
-    let sorted = [...productsArray]; 
+    let sorted = [...productsArray];
     if (sortOrder === 'asc') {
         sorted.sort((a, b) => a.price - b.price); // Menor a Mayor
     } else if (sortOrder === 'desc') {

@@ -18,5 +18,5 @@ try {
     console.error('❌ Error al inicializar la base de datos:', error);
 }
 
-// 4. Exportamos la conexión para usarla en otras partes de la aplicación
+// 4. Exportamos la conexión 
 module.exports = db;

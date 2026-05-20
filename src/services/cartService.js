@@ -1,5 +1,5 @@
-// El servicio es el encargado de interactuar con los datos (el JSON en este caso)
-const productos = require("../data/products.json");
+
+const productos = require('./productsService').getAllProducts(); 
 
 const agregarItem = (cart, productId, quantity) => {
     const indice = cart.findIndex(p => p.productId === productId);
