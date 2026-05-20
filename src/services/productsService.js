@@ -1,11 +1,24 @@
 const db = require('../db/database.js'); // Asegurate de que la ruta a database.js sea correcta
 
+
+// Normaliza y valida el ID del producto, asegurando que sea un número positivo y que exista en la base de datos
 const normalizeId = (id) => {
     const parsedId = Number(id);
-    if (Number.isInteger(parsedId) && parsedId > 0) {
-        return parsedId;
+
+    // 1. Validar que sea un numero valido y positivo
+    if (!Number.isInteger(parsedId) || parsedId <= 0) {
+        return { isValid: false, status: 400 };
     }
-    return null;
+
+    // 2. Validar que el producto exista en la base de datos
+    const exists = db.prepare('SELECT id FROM products WHERE id = ?').get(parsedId);
+
+    if (!exists) {
+        return { isValid: false, status: 404 };
+    }
+
+    // Si pasa ambas validaciones, retornamos el ID normalizado
+    return { isValid: true, id: parsedId };
 }
 
 // Trae todos los productos desde la base de datos (con imagen agregada)
@@ -34,8 +47,9 @@ const searchProducts = (searchTerm) => {
 
 // Busca un producto por ID en la base de datos
 const getProductById = (id) => {
-    const validId = normalizeId(id);
-    if (!validId) return null;
+
+    // Forzamos a Number por seguridad 
+    const safeId = Number(id); 
 
     const sql = `
         SELECT p.id, p.title AS name, p.description, p.price, p.stock, p.image, p.thumbnails, c.name AS categoria
@@ -43,7 +57,7 @@ const getProductById = (id) => {
         LEFT JOIN categories c ON p.category_id = c.id
         WHERE p.id = ?
     `;
-    const product = db.prepare(sql).get(validId);
+    const product = db.prepare(sql).get(safeId);
 
     // Si encontramos el producto y tiene thumbnails en texto, lo parseamos a array
     if (product && product.thumbnails) {

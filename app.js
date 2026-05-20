@@ -41,7 +41,6 @@ app.use((req, res, next) => {
 // Contador de productos del carrito optimizado
 app.use((req, res, next) => {
     let cantidadTotal = 0;
-    // Usamos ?. (Optional Chaining) para que sea más limpio
     if (req.session?.cart) {
         cantidadTotal = req.session.cart.reduce((acumulador, item) => acumulador + item.quantity, 0);
     }

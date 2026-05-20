@@ -36,42 +36,44 @@ const verListado = (req, res) => {
 }
 
 
-// 2. VER DETALLE DE UN PRODUCTO
+// VER DETALLE DE UN PRODUCTO (con validación de ID y manejo de errores)
 const verDetalle = (req, res) => {
-    const rawId = req.params.id;
+    const pid = req.params.id; 
+    
+    // --- PASO 1: Normalizamos y validamos contra la base de datos ---
+    const validation = productService.normalizeId(pid);
 
-    // --- PASO 1: Normalizamos el ID ---
-    const validId = productService.normalizeId(rawId);
-
-    // ESCENARIO 1: ID no numérico -> 400
-    if (validId === null) {
+    // Si el id es no numerico o negativo, mostramos un error 400 (Bad Request)
+    if (validation.status === 400) {
         return res.status(400).render("pages/400");
     }
 
-    // --- PASO 2: Buscamos el producto con el ID validado ---
-    const product = productService.getProductById(validId);
-    const categorias = productService.getCategories();
-
-    // ESCENARIO 2: ID numérico pero inexistente -> 404
-    if (!product) {
+    // Si el producto no existe en la base de datos, mostramos un error 404 con productos recomendados
+    if (validation.status === 404) {
         const todosLosProductos = productService.getAllProducts();
         const recomendados = productService.getRandomProducts(todosLosProductos, 4);
-
-        return res.status(404).render('pages/productoNoEncontrado', {
+        const categorias = productService.getCategories();
+        
+        return res.status(404).render('pages/productoNoEncontrado', { 
             randomProducts: recomendados,
-            categorias: categorias
+            categorias: categorias,
+            randomProducts: productService.getRandomProducts(productService.getAllProducts(), 4)
         });
     }
 
-    // --- PASO 3: Producto encontrado ---
+    // --- PASO 2: Producto validado y encontrado ---
+
+    const product = productService.getProductById(validation.id);
+    const categorias = productService.getCategories();
+
     const productosMismaCategoria = productService.getProductsByCategory(product.categoria)
-        .filter(p => p.id !== product.id);
-
+                                        .filter(p => p.id !== product.id);
+    
     const productosRelacionados = productService.getRandomProducts(productosMismaCategoria, 4);
-
+    
     res.render('pages/product', {
         product: product,
-        products: productosRelacionados,
+        products: productosRelacionados, 
         categorias
     });
 }
