@@ -4,7 +4,7 @@ const path = require('path');
 
 // 1. Inicializamos la base de datos 
 const dbPath = path.join(__dirname, 'ecommerce.db');
-const db = new Database(dbPath, { verbose: console.log }); // 'verbose' te imprime las consultas en consola para debuggear
+const db = new Database(dbPath, { verbose: console.log }); // 'verbose' imprime las consultas en consola para debuggear
 
 // 2. Leemos el archivo schema.sql
 const schemaPath = path.join(__dirname, 'schema.sql');

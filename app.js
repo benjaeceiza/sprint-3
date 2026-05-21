@@ -15,7 +15,7 @@ const cartRouter = require('./src/routes/cart.router');
 const app = express();
 const port = 3000;
 
-// --- CONFIGURACIÓN DE MOTOR DE VISTAS ---
+// --- CONFIGURACIÓN DE MOTOR DE VISTAS --
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.use(expressLayouts); 
